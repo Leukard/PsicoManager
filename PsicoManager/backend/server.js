@@ -19,9 +19,35 @@ const { processar } = require('./controllers/lembreteController');
 
 const app = express();
 const port = process.env.PORT || 5000;
+const isProduction = process.env.NODE_ENV === 'production';
+const sessionSecret = process.env.SESSION_SECRET || 'psicomanager';
+
+const allowedOrigins = process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
+    : (isProduction ? [] : ['http://localhost:5000', 'http://127.0.0.1:5000']);
+
+if (isProduction) {
+    app.set('trust proxy', 1);
+}
+
 app.use(cors({
-    origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'https://psicomanager-tl02.onrender.com'], 
-    credentials: true                
+    origin: function (origin, callback) {
+        if (!origin) {
+            return callback(null, true);
+        }
+
+        if (allowedOrigins.length === 0) {
+            console.warn('⚠️ CORS_ORIGINS não definido. Permitindo todas as origens em produção. Configure CORS_ORIGINS no Render.');
+            return callback(null, true);
+        }
+
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true
 }));
 
 app.use(express.json());
@@ -49,13 +75,21 @@ console.log("✅ Conexão com Supabase configurada!");
    MIDDLEWARES
 ========================= */
 
-app.use(express.json());
-
 app.use(session({
-    secret: "psicomanager",
+    secret: sessionSecret,
     resave: false,
-    saveUninitialized: false, 
+    saveUninitialized: false,
+    cookie: {
+        secure: isProduction,
+        httpOnly: true,
+        sameSite: isProduction ? 'none' : 'lax',
+        maxAge: 24 * 60 * 60 * 1000
+    }
 }));
+
+if (isProduction && !process.env.SESSION_SECRET) {
+    console.warn('⚠️ SESSION_SECRET is not set. Configure SESSION_SECRET for production environments.');
+}
 
 /* =========================
    ROTAS PÚBLICAS 
@@ -240,33 +274,39 @@ app.post('/api/login', async (req, res) => {
    SERVER
 ========================= */
 
-app.listen(port, () => {
-    console.log(`🌐 Servidor rodando em: http://localhost:${port}`);
-});
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`🌐 Servidor rodando em: http://localhost:${port}`);
+    });
+}
 
-/* =========================
-   [HUGO] CRON JOB - Envio automático de lembretes
-   Executa todos os dias às 08:00 da manhã
-   O formato cron é: 'minuto hora * * *'
-   Então '0 8 * * *' = todo dia às 08:00
-========================= */
-cron.schedule('0 8 * * *', async () => {
-    console.log('[CRON] Iniciando envio automático de lembretes...');
-    try {
-        const resultados = await processar();
-        console.log(`[CRON] ${resultados.length} lembretes enviados com sucesso.`);
-    } catch (err) {
-        console.error('[CRON] Erro ao enviar lembretes:', err.message);
-    }
-});
+module.exports = app;
 
-// Adicionar junto com o outro cron.schedule, no final do arquivo
-cron.schedule('0 3 * * *', async () => {
-    console.log('[CRON] Iniciando backup automático...');
-    try {
-        const arquivo = await executarBackup();
-        console.log(`[CRON] Backup concluído: ${arquivo}`);
-    } catch (err) {
-        console.error('[CRON] Erro no backup:', err.message);
-    }
-});
+if (require.main === module) {
+    /* =========================
+       [HUGO] CRON JOB - Envio automático de lembretes
+       Executa todos os dias às 08:00 da manhã
+       O formato cron é: 'minuto hora * * *'
+       Então '0 8 * * *' = todo dia às 08:00
+    ========================= */
+    cron.schedule('0 8 * * *', async () => {
+        console.log('[CRON] Iniciando envio automático de lembretes...');
+        try {
+            const resultados = await processar();
+            console.log(`[CRON] ${resultados.length} lembretes enviados com sucesso.`);
+        } catch (err) {
+            console.error('[CRON] Erro ao enviar lembretes:', err.message);
+        }
+    });
+
+    // Adicionar junto com o outro cron.schedule, no final do arquivo
+    cron.schedule('0 3 * * *', async () => {
+        console.log('[CRON] Iniciando backup automático...');
+        try {
+            const arquivo = await executarBackup();
+            console.log(`[CRON] Backup concluído: ${arquivo}`);
+        } catch (err) {
+            console.error('[CRON] Erro no backup:', err.message);
+        }
+    });
+}
