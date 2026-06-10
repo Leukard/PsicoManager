@@ -24,7 +24,7 @@ const sessionSecret = process.env.SESSION_SECRET || 'psicomanager';
 
 const allowedOrigins = process.env.CORS_ORIGINS
     ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
-    : ['http://localhost:5000', 'http://127.0.0.1:5000'];
+    : (isProduction ? [] : ['http://localhost:5000', 'http://127.0.0.1:5000']);
 
 if (isProduction) {
     app.set('trust proxy', 1);
@@ -33,6 +33,11 @@ if (isProduction) {
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) {
+            return callback(null, true);
+        }
+
+        if (allowedOrigins.length === 0) {
+            console.warn('⚠️ CORS_ORIGINS não definido. Permitindo todas as origens em produção. Configure CORS_ORIGINS no Render.');
             return callback(null, true);
         }
 
