@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoManager - Clientes</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+    <link rel="stylesheet" href="../styles/cliente.css">
+</head>
+<body class="bg-light">
+
+    <div class="d-flex" id="wrapper">
+        
+        <aside class="sidebar d-none d-lg-flex p-4" id="sidebar-wrapper">
+            <div class="sidebar-header d-flex align-items-center gap-2 mb-5">
+                <i class="ph-fill ph-calendar-check logo-icon"></i>
+                <h2 class="fs-5 fw-bold mb-0">PsicoManager</h2>
+            </div>
+            <nav class="sidebar-nav flex-grow-1">
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item"><a href="../index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                    <li class="nav-item active"><a href="clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                    <li class="nav-item"><a href="pacientes.html" class="nav-link"><i class="ph ph-heartbeat"></i> Pacientes</a></li>
+                    <li class="nav-item"><a href="financeiro.html" class="nav-link"><i class="ph ph-currency-circle-dollar"></i> Financeiro</a></li>
+                    <li class="nav-item"><a href="convenios.html" class="nav-link"><i class="ph ph-clipboard-text"></i> Convênios</a></li>
+                    <li class="nav-item"><a href="planos.html" class="nav-link"><i class="ph ph-badge-check"></i> Planos</a></li>
+                    <li class="nav-item"><a href="tarefas.html" class="nav-link"><i class="ph ph-list-check"></i> Tarefas</a></li>
+                    <li class="nav-item"><a href="documentos.html" class="nav-link"><i class="ph ph-file-text"></i> Documentos</a></li>
+                    <li class="nav-item"><a href="lembretes.html" class="nav-link"><i class="ph ph-bell"></i> Lembretes</a></li>
+                    <li class="nav-item"><a href="relatorios.html" class="nav-link"><i class="ph ph-chart-line-up"></i> Relatórios</a></li>
+                    <li class="nav-item"><a href="espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                    <li class="nav-item"><a href="bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-action mb-4">
+                <button class="btn btn-primary w-100 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalNovoAgendamento">
+                    <i class="ph ph-plus"></i> Novo Agendamento
+                </button>
+            </div>
+            <div class="sidebar-footer border-top border-secondary pt-3 mt-auto">
+                <button class="btn-logout w-100 text-start text-white border-0 bg-transparent opacity-75 hover-opacity-100"><i class="ph ph-sign-out"></i> Sair do sistema</button>
+            </div>
+        </aside>
+
+        <div id="page-content-wrapper" class="w-100 d-flex flex-column h-100 overflow-auto">
+            
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3">
+                <div class="container-fluid p-0">
+                    <button class="btn d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+                        <i class="ph ph-list fs-3"></i>
+                    </button>
+                    
+                    <form class="d-none d-md-flex ms-2">
+                        <div class="input-group bg-light rounded-pill px-3 py-1 border">
+                            <i class="ph ph-magnifying-glass align-self-center text-muted"></i>
+                            <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Buscar cliente...">
+                        </div>
+                    </form>
+
+                    <div class="ms-auto d-flex align-items-center user-profile">
+                        <div class="text-end me-3 d-none d-sm-block">
+                            <small class="text-muted d-block lh-1">Bem-vindo,</small>
+                            <strong id="nomeUsuario" class="d-block mt-1">...</strong>
+                        </div>
+                        <img id="fotoUsuario" src="https://ui-avatars.com/api/?name=User&background=cbd5e1&color=fff" class="rounded-circle" width="40" height="40">
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                    <div>
+                        <h2 class="mb-0 fs-3 fw-bold">Meus Clientes</h2>
+                        <p class="text-muted mb-0">Gerencie a base de clientes do seu negócio.</p>
+                    </div>
+                    <button class="btn btn-primary fw-semibold px-4" data-bs-toggle="modal" data-bs-target="#modalNovoCliente">
+                        <i class="ph ph-user-plus me-2"></i>Novo Cliente
+                    </button>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-muted small">
+                                <tr>
+                                    <th class="fw-semibold px-4 py-3 border-0">Cliente</th>
+                                    <th class="fw-semibold py-3 border-0">Último Agendamento</th>
+                                    <th class="fw-semibold text-end px-4 py-3 border-0">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody class="border-top-0" id="listaClientes">
+                                </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center">
+                        <span class="text-muted small" id="contadorClientes">Mostrando dados...</span>
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled"><a class="page-link border-0 text-muted" href="#">Anterior</a></li>
+                            <li class="page-item active"><a class="page-link border-0 rounded" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link border-0 text-dark" href="#">Próximo</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" style="background-color: var(--cor-sidebar);" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header border-bottom border-secondary p-4">
+            <div class="d-flex align-items-center gap-2">
+                <i class="ph-fill ph-calendar-check logo-icon text-primary fs-3"></i>
+                <h5 class="offcanvas-title text-white fw-bold">PsicoManager</h5>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4 d-flex flex-column">
+            <ul class="nav flex-column gap-2 mb-auto sidebar-nav">
+                <li class="nav-item"><a href="../index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                <li class="nav-item active"><a href="clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                <li class="nav-item"><a href="espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                <li class="nav-item"><a href="bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+            </ul>
+            <button class="btn btn-primary w-100 fw-semibold mb-3" data-bs-toggle="modal" data-bs-target="#modalNovoAgendamento">
+                <i class="ph ph-plus"></i> Novo Agendamento
+            </button>
+            <button class="btn-logout w-100 text-start text-white border-0 bg-transparent opacity-75 mt-3"><i class="ph ph-sign-out"></i> Sair</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNovoAgendamento" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="ph ph-calendar-plus me-2"></i>Novo Agendamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formAgendamentoGlobal">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Paciente</label>
+                            <select class="form-select" id="selectClienteGlobal" required>
+                                <option value="" selected disabled>Carregando pacientes...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Espaço / Local</label>
+                            <select class="form-select" id="selectEspacoGlobal" required>
+                                <option value="" selected disabled>Carregando locais...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Quantidade de Pessoas</label>
+                            <input type="number" class="form-control" id="numeroPessoasGlobal" value="1" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Status da Reunião</label>
+                            <select class="form-select" id="selectStatusGlobal" required>
+                                <option value="" selected disabled>Carregando status...</option>
+                            </select>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Data Início</label>
+                                <input type="datetime-local" class="form-control" id="dataInicioGlobal" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Data Fim</label>
+                                <input type="datetime-local" class="form-control" id="dataFimGlobal" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Observações / Descrição</label>
+                            <textarea class="form-control" id="observacoesGlobal" rows="2" placeholder="Detalhes do agendamento..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" id="btnSalvarAgendamentoGlobal">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNovoCliente" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="ph ph-user-plus me-2"></i>Novo Cliente</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formCliente">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Nome Completo</label>
+                            <input type="text" class="form-control" id="nomeCliente" placeholder="Ex: João da Silva" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">E-mail</label>
+                            <input type="email" class="form-control" id="emailCliente" placeholder="exemplo@email.com">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" id="btnSalvarCliente">Salvar Cliente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="ph ph-pencil-simple me-2"></i>Editar Cliente</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formEditarCliente">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Nome Completo</label>
+                            <input type="text" class="form-control" id="editNomeCliente" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">E-mail</label>
+                            <input type="email" class="form-control" id="editEmailCliente">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" id="btnSalvarEdicaoCliente">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../scripts/global-agendamento.js"></script>
+    <script>
+        // Verificar usuário logado
+        async function verificarUsuario() {
+            try {
+                const res = await fetch('/usuario-logado');
+                const data = await res.json();
+                if (!data.logado) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                document.getElementById('nomeUsuario').innerText = data.usuario.nome || "Usuário";
+                document.getElementById('fotoUsuario').src = data.usuario.foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.usuario.nome || "User")}`;
+            } catch (error) {
+                console.error('Erro ao verificar usuário:', error);
+            }
+        }
+
+        // Carregar clientes
+        async function carregarClientes() {
+            try {
+                const res = await fetch('/clientes');
+                if (!res.ok) throw new Error('Erro ao buscar clientes');
+                const clientes = await res.json();
+                const lista = document.getElementById('listaClientes');
+                
+                lista.innerHTML = clientes.map(cliente => `
+                    <tr>
+                        <td class="px-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(cliente.nome)}&background=random" class="rounded-circle" width="32" height="32">
+                                <div>
+                                    <span class="d-block fw-semibold">${cliente.nome}</span>
+                                    <small class="text-muted">${cliente.email || 'Sem e-mail'}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="text-muted small">Nenhum</span>
+                        </td>
+                        <td class="text-end px-4">
+                            <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-sm btn-light text-primary" onclick="prepararEdicaoCliente('${cliente.id}')" title="Editar">
+                                    <i class="ph ph-pencil-simple"></i>
+                                </button>
+                                <button class="btn btn-sm btn-light text-danger" onclick="excluirCliente('${cliente.id}')" title="Excluir">
+                                    <i class="ph ph-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('contadorClientes').innerText = `Total de ${clientes.length} clientes`;
+            } catch (error) {
+                console.error('Erro ao carregar clientes:', error);
+            }
+        }
+
+        // Salvar cliente
+        document.getElementById('btnSalvarCliente').addEventListener('click', async () => {
+            const nome = document.getElementById('nomeCliente').value;
+            const email = document.getElementById('emailCliente').value;
+
+            if (!nome) {
+                alert('O nome do cliente é obrigatório!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/clientes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, email })
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.erro || 'Erro ao salvar cliente');
+                
+                alert('Cliente cadastrado com sucesso!');
+                document.getElementById('formCliente').reset();
+                bootstrap.Modal.getInstance(document.getElementById('modalNovoCliente')).hide();
+                carregarClientes();
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+
+        // Excluir cliente
+        async function excluirCliente(id) {
+            if (!confirm('Tem certeza que deseja excluir este cliente?')) return;
+            try {
+                const response = await fetch(`/clientes/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Erro ao excluir cliente');
+                alert('Cliente excluído com sucesso!');
+                carregarClientes();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        let idClienteEmEdicao = null;
+        async function prepararEdicaoCliente(id) {
+            try {
+                const res = await fetch('/clientes');
+                const clientes = await res.json();
+                const cliente = clientes.find(c => c.id === id);
+                if (!cliente) return;
+
+                idClienteEmEdicao = id;
+                document.getElementById('editNomeCliente').value = cliente.nome;
+                document.getElementById('editEmailCliente').value = cliente.email || '';
+
+                new bootstrap.Modal(document.getElementById('modalEditarCliente')).show();
+            } catch (error) {
+                console.error('Erro ao preparar edição:', error);
+            }
+        }
+
+        document.getElementById('btnSalvarEdicaoCliente').addEventListener('click', async () => {
+            const nome = document.getElementById('editNomeCliente').value;
+            const email = document.getElementById('editEmailCliente').value;
+
+            if (!nome) {
+                alert('O nome do cliente é obrigatório!');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/clientes/${idClienteEmEdicao}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, email })
+                });
+                if (!response.ok) throw new Error('Erro ao atualizar cliente');
+                alert('Cliente atualizado com sucesso!');
+                bootstrap.Modal.getInstance(document.getElementById('modalEditarCliente')).hide();
+                carregarClientes();
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+
+        // Logout
+        document.querySelectorAll('.btn-logout').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                try {
+                    await fetch('/logout', { method: 'POST' });
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('Erro no logout:', error);
+                }
+            });
+        });
+
+        // Inicializar os dados da página de clientes
+        document.addEventListener('DOMContentLoaded', () => {
+            verificarUsuario();
+            carregarClientes();
+        });
+
+        // (Removido daqui pois agora está no global-agendamento.js)
+    </script>
+</body>
+</html>

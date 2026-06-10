@@ -1,0 +1,44 @@
+/* ==========================================
+   ESTILOS ESPECÍFICOS: PÁGINA DE CLIENTES
+   ========================================== */
+
+.table-hover tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Badges de Status */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 50rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-ativo {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-inativo {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Botões de Ação na Tabela (Editar/Excluir) */
+.action-btn {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: 0.2s ease-in-out;
+    color: #64748b;
+    text-decoration: none;
+}
+
+.action-btn:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}

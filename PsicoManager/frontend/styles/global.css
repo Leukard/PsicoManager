@@ -1,0 +1,42 @@
+/* ==========================================
+   VARIÁVEIS DE CORES E ESTILOS GLOBAIS
+   ========================================== */
+:root {
+    --cor-sidebar: #1E293B;        
+    --cor-principal: #2563EB;      
+    --cor-secundaria: #10B981;     
+    --cor-alerta: #F59E0B;         
+    --cor-erro: #EF4444;           
+    --cor-fundo: #F8FAFC;          
+    --cor-texto: #1E293B;          
+    --cor-texto-claro: #64748B;    
+    --cor-branco: #FFFFFF;
+    --cor-borda: #E2E8F0;
+    --borda-raio: 8px;
+    --sombra-suave: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+}
+
+/* Sobrescrevendo a cor principal do Bootstrap para bater com o projeto */
+.btn-primary {
+    background-color: var(--cor-principal);
+    border-color: var(--cor-principal);
+}
+.btn-primary:hover {
+    background-color: #1D4ED8;
+    border-color: #1D4ED8;
+}
+.text-primary {
+    color: var(--cor-principal) !important;
+}

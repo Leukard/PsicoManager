@@ -1,0 +1,63 @@
+/* ==========================================
+   ESTILOS ESPECÍFICOS: PÁGINA DE ESPAÇOS
+   ========================================== */
+
+/* Estilização do Card de Espaço */
+.space-card {
+    border-radius: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.space-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Ícone de destaque do Espaço */
+.space-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+/* Reaproveitando as Badges do Cliente para manter consistência */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 50rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-ativo {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-inativo {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Botões do Card */
+.space-card .btn-light {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+}
+
+.space-card .btn-light:hover {
+    background-color: #e2e8f0;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+.space-card .btn-light.text-danger:hover {
+    background-color: #fee2e2;
+    border-color: #fca5a5;
+    color: #b91c1c !important;
+}

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoManager - Calendário</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+    <link rel="stylesheet" href="../styles/calendario.css">
+</head>
+<body class="bg-light">
+
+    <div class="d-flex" id="wrapper">
+        
+        <aside class="sidebar d-none d-lg-flex p-4" id="sidebar-wrapper">
+            <div class="sidebar-header d-flex align-items-center gap-2 mb-5">
+                <i class="ph-fill ph-calendar-check logo-icon"></i>
+                <h2 class="fs-5 fw-bold mb-0">PsicoManager</h2>
+            </div>
+            <nav class="sidebar-nav flex-grow-1">
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item"><a href="../index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                    <li class="nav-item active"><a href="calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                    <li class="nav-item"><a href="clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                    <li class="nav-item"><a href="pacientes.html" class="nav-link"><i class="ph ph-heartbeat"></i> Pacientes</a></li>
+                    <li class="nav-item"><a href="financeiro.html" class="nav-link"><i class="ph ph-currency-circle-dollar"></i> Financeiro</a></li>
+                    <li class="nav-item"><a href="convenios.html" class="nav-link"><i class="ph ph-clipboard-text"></i> Convênios</a></li>
+                    <li class="nav-item"><a href="planos.html" class="nav-link"><i class="ph ph-badge-check"></i> Planos</a></li>
+                    <li class="nav-item"><a href="tarefas.html" class="nav-link"><i class="ph ph-list-check"></i> Tarefas</a></li>
+                    <li class="nav-item"><a href="documentos.html" class="nav-link"><i class="ph ph-file-text"></i> Documentos</a></li>
+                    <li class="nav-item"><a href="lembretes.html" class="nav-link"><i class="ph ph-bell"></i> Lembretes</a></li>
+                    <li class="nav-item"><a href="relatorios.html" class="nav-link"><i class="ph ph-chart-line-up"></i> Relatórios</a></li>
+                    <li class="nav-item"><a href="espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                    <li class="nav-item"><a href="bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-action mb-4">
+                <button class="btn btn-primary w-100 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalNovoAgendamento">
+                    <i class="ph ph-plus"></i> Novo Agendamento
+                </button>
+            </div>
+            <div class="sidebar-footer border-top border-secondary pt-3 mt-auto">
+                <button class="btn-logout w-100 text-start text-white border-0 bg-transparent opacity-75 hover-opacity-100"><i class="ph ph-sign-out"></i> Sair do sistema</button>
+            </div>
+        </aside>
+
+        <div id="page-content-wrapper" class="w-100 d-flex flex-column h-100 overflow-auto">
+            
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3">
+                <div class="container-fluid p-0">
+                    <button class="btn d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+                        <i class="ph ph-list fs-3"></i>
+                    </button>
+                    
+                    <form class="d-none d-md-flex ms-2">
+                        <div class="input-group bg-light rounded-pill px-3 py-1 border">
+                            <i class="ph ph-magnifying-glass align-self-center text-muted"></i>
+                            <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Buscar agendamento...">
+                        </div>
+                    </form>
+
+                    <div class="ms-auto d-flex align-items-center user-profile">
+                        <div class="text-end me-3 d-none d-sm-block">
+                            <small class="text-muted d-block lh-1">Bem-vindo,</small>
+                            <strong id="nomeUsuario" class="d-block mt-1">...</strong>
+                        </div>
+                        <img id="fotoUsuario" src="https://ui-avatars.com/api/?name=User&background=cbd5e1&color=fff" class="rounded-circle" width="40" height="40">
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="card-body p-0">
+                        
+                        <div class="d-flex flex-wrap justify-content-between align-items-center p-4 gap-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <h2 class="mb-0 fs-4 fw-bold" id="mesAnoAtual" style="min-width: 200px;">Carregando...</h2>
+                                <div class="btn-group border rounded-3 overflow-hidden">
+                                    <button class="btn btn-light btn-sm px-3 border-end fw-bold" id="btnMesAnterior">&lt;</button>
+                                    <button class="btn btn-light btn-sm px-3 fw-semibold" id="btnHoje" style="min-width: 110px;">Mês Atual</button>
+                                    <button class="btn btn-light btn-sm px-3 border-start fw-bold" id="btnProximoMes">&gt;</button>
+                                </div>
+                            </div>
+                            <div class="btn-group bg-light p-1 rounded-3 border">
+                                <button id="btnDia" class="btn btn-sm px-3 text-muted">Dia</button>
+                                <button id="btnSemana" class="btn btn-sm px-3 text-muted">Semana</button>
+                                <button id="btnMes" class="btn btn-sm px-3 fw-bold bg-white shadow-sm">Mês</button>
+                                <button id="btnLista" class="btn btn-sm px-3 text-muted">Lista</button>
+                            </div>
+                        </div>
+
+                        <div class="calendar-container border-top">
+                            <div id="calendarGridBody">
+                                </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" style="background-color: var(--cor-sidebar);" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header border-bottom border-secondary p-4">
+            <div class="d-flex align-items-center gap-2">
+                <i class="ph-fill ph-calendar-check logo-icon text-primary fs-3"></i>
+                <h5 class="offcanvas-title text-white fw-bold">PsicoManager</h5>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4 d-flex flex-column">
+            <ul class="nav flex-column gap-2 mb-auto sidebar-nav">
+                <li class="nav-item"><a href="../index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                <li class="nav-item active"><a href="calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                <li class="nav-item"><a href="clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                <li class="nav-item"><a href="espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                <li class="nav-item"><a href="bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+            </ul>
+            <button class="btn btn-primary w-100 fw-semibold mb-3" data-bs-toggle="modal" data-bs-target="#modalNovoAgendamento">
+                <i class="ph ph-plus"></i> Novo Agendamento
+            </button>
+            <button class="btn-logout w-100 text-start text-white border-0 bg-transparent opacity-75 mt-3"><i class="ph ph-sign-out"></i> Sair</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNovoAgendamento" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="ph ph-calendar-plus me-2"></i>Novo Agendamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formAgendamentoGlobal">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Paciente</label>
+                            <select class="form-select" id="selectClienteGlobal" required>
+                                <option value="" selected disabled>Carregando pacientes...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Espaço / Local</label>
+                            <select class="form-select" id="selectEspacoGlobal" required>
+                                <option value="" selected disabled>Carregando locais...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Quantidade de Pessoas</label>
+                            <input type="number" class="form-control" id="numeroPessoasGlobal" value="1" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Status da Reunião</label>
+                            <select class="form-select" id="selectStatusGlobal" required>
+                                <option value="" selected disabled>Carregando status...</option>
+                            </select>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Data Início</label>
+                                <input type="datetime-local" class="form-control" id="dataInicioGlobal" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Data Fim</label>
+                                <input type="datetime-local" class="form-control" id="dataFimGlobal" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Observações / Descrição</label>
+                            <textarea class="form-control" id="observacoesGlobal" rows="2" placeholder="Detalhes do agendamento..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" id="btnSalvarAgendamentoGlobal">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../scripts/global-agendamento.js"></script>
+
+<script>
+let modoVisualizacao = 'mes';
+let dataAtual = new Date();
+
+// 1. CARREGAR USUÁRIO
+async function verificarUsuario() {
+    try {
+        const res = await fetch('/usuario-logado');
+        const data = await res.json();
+        if (!data.logado) {
+            window.location.href = 'login.html';
+            return;
+        }
+        document.getElementById('nomeUsuario').innerText = data.usuario.nome || "Usuário";
+        document.getElementById('fotoUsuario').src = data.usuario.foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.usuario.nome || "User")}`;
+    } catch (error) {}
+}
+
+async function logout() {
+    try {
+        await fetch('/logout', { method: 'POST' });
+        window.location.href = 'login.html';
+    } catch (error) {}
+}
+
+// 2. LÓGICA PRINCIPAL DE RENDERIZAÇÃO
+async function renderizarCalendario() {
+    atualizarBotoes();
+    
+    if (modoVisualizacao === 'dia') return renderizarDia();
+    if (modoVisualizacao === 'semana') return renderizarSemana();
+    if (modoVisualizacao === 'lista') return renderizarLista();
+
+    // RENDERIZAR MÊS (Padrão)
+    const grid = document.getElementById('calendarGridBody');
+    const tituloMesAno = document.getElementById('mesAnoAtual');
+    grid.innerHTML = '';
+
+    const ano = dataAtual.getFullYear();
+    const mes = dataAtual.getMonth();
+
+    const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    tituloMesAno.innerText = `${nomesMeses[mes]} ${ano}`;
+
+    const primeiroDiaMes = new Date(ano, mes, 1);
+    const ultimoDiaMes = new Date(ano, mes + 1, 0);
+    const diaSemanaPrimeiro = primeiroDiaMes.getDay();
+    const ultimoDiaMesAnterior = new Date(ano, mes, 0).getDate();
+    
+    let html = `
+    <div class="calendar-grid-header d-flex bg-light border-bottom">
+        <div class="col text-muted text-center fw-semibold py-2 border-end">Dom</div>
+        <div class="col text-muted text-center fw-semibold py-2 border-end">Seg</div>
+        <div class="col text-muted text-center fw-semibold py-2 border-end">Ter</div>
+        <div class="col text-muted text-center fw-semibold py-2 border-end">Qua</div>
+        <div class="col text-muted text-center fw-semibold py-2 border-end">Qui</div>
+        <div class="col text-muted text-center fw-semibold py-2 border-end">Sex</div>
+        <div class="col text-muted text-center fw-semibold py-2">Sáb</div>
+    </div>`;
+
+    let diaCount = 1;
+    let diaMesAnteriorCount = ultimoDiaMesAnterior - diaSemanaPrimeiro + 1;
+    let proximoMesCount = 1;
+
+    for (let i = 0; i < 6; i++) {
+        html += '<div class="calendar-row d-flex border-bottom">';
+        for (let j = 0; j < 7; j++) {
+            if (i === 0 && j < diaSemanaPrimeiro) {
+                html += `<div class="calendar-day col bg-light opacity-50 border-end border-start p-1"><span class="day-num">${diaMesAnteriorCount}</span><div class="event-list"></div></div>`;
+                diaMesAnteriorCount++;
+            } else if (diaCount > ultimoDiaMes.getDate()) {
+                html += `<div class="calendar-day col bg-light opacity-50 border-end border-start p-1"><span class="day-num">${proximoMesCount}</span><div class="event-list"></div></div>`;
+                proximoMesCount++;
+            } else {
+                const hoje = new Date();
+                const isHoje = hoje.getDate() === diaCount && hoje.getMonth() === mes && hoje.getFullYear() === ano;
+                html += `<div class="calendar-day col ${isHoje ? 'bg-primary-subtle' : ''} border-end border-start p-1" data-dia="${diaCount}">
+                            <span class="day-num ${isHoje ? 'text-primary fw-bold' : ''}">${diaCount}</span>
+                            <div class="event-list"></div>
+                         </div>`;
+                diaCount++;
+            }
+        }
+        html += '</div>';
+        if (diaCount > ultimoDiaMes.getDate() && i >= 4) break;
+    }
+
+    grid.innerHTML = html;
+    await carregarEventosMes(ano, mes);
+}
+
+// 3. RENDERIZAR DIA
+async function renderizarDia() {
+    const grid = document.getElementById('calendarGridBody');
+    const titulo = document.getElementById('mesAnoAtual');
+
+    const opcoes = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let nomeData = dataAtual.toLocaleDateString('pt-BR', opcoes);
+    titulo.innerText = nomeData.charAt(0).toUpperCase() + nomeData.slice(1);
+
+    let html = '';
+    for (let hora = 0; hora <= 23; hora++) {
+        const horaFmt = String(hora).padStart(2, '0');
+        html += `
+            <div class="d-flex border-bottom align-items-center" style="height:60px;">
+                <div class="px-3 text-muted text-end fw-semibold" style="width:80px; min-width:80px; flex-shrink:0;"><small>${horaFmt}:00</small></div>
+                <div class="col border-start position-relative day-hour-slot h-100 p-1" data-hora="${hora}"></div>
+            </div>
+        `;
+    }
+
+    grid.innerHTML = html;
+    await carregarEventosDia(dataAtual);
+}
+
+// 4. RENDERIZAR SEMANA (ALINHAMENTO CORRIGIDO E PADRONIZADO)
+async function renderizarSemana() {
+    const grid = document.getElementById('calendarGridBody');
+    const titulo = document.getElementById('mesAnoAtual');
+
+    const inicioSemana = new Date(dataAtual);
+    inicioSemana.setDate(dataAtual.getDate() - dataAtual.getDay());
+    
+    const fimSemana = new Date(inicioSemana);
+    fimSemana.setDate(inicioSemana.getDate() + 6);
+
+    const mesInicio = inicioSemana.toLocaleDateString('pt-BR', { month: 'short' });
+    const mesFim = fimSemana.toLocaleDateString('pt-BR', { month: 'short' });
+    titulo.innerText = `${inicioSemana.getDate()} ${mesInicio} - ${fimSemana.getDate()} ${mesFim} ${fimSemana.getFullYear()}`;
+
+    const diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    
+    let html = '<div class="d-flex border-bottom bg-light sticky-top" style="z-index: 10;">';
+    html += `<div style="width:80px; min-width:80px; flex-shrink:0;"></div>`; 
+
+    let datasDaSemana = [];
+    for(let i=0; i<7; i++) {
+        let dia = new Date(inicioSemana);
+        dia.setDate(inicioSemana.getDate() + i);
+        datasDaSemana.push(dia);
+        
+        let isHoje = (dia.toDateString() === new Date().toDateString());
+        html += `<div class="col text-center p-2 border-end border-start ${isHoje ? 'bg-primary text-white rounded-top' : 'text-secondary'}">
+                    <span class="fs-4 fw-bold lh-1">${dia.getDate()}</span><br>
+                    <small class="fw-semibold text-uppercase" style="font-size: 0.75rem;">${diasSemana[i]}</small>
+                 </div>`;
+    }
+    html += '</div>';
+
+    // Grid de Horas - Alinhamento Idêntico ao da Visão Dia
+    for (let hora = 0; hora <= 23; hora++) {
+        const horaFmt = String(hora).padStart(2, '0');
+        
+        // Adicionado align-items-center para centralizar perfeitamente as horas com as linhas do grid
+        html += `<div class="d-flex border-bottom align-items-center" style="height:60px;">`;
+        
+        // Coluna de hora exatamente igual à da visão diária
+        html += `<div class="px-3 text-muted text-end fw-semibold" style="width:80px; min-width:80px; flex-shrink:0;"><small>${horaFmt}:00</small></div>`;
+        
+        for (let i = 0; i < 7; i++) {
+            let year = datasDaSemana[i].getFullYear();
+            let month = String(datasDaSemana[i].getMonth()+1).padStart(2,'0');
+            let day = String(datasDaSemana[i].getDate()).padStart(2,'0');
+            let dataStr = `${year}-${month}-${day}`;
+
+            // Adicionado h-100 para a caixa ocupar a altura inteira de 60px
+            html += `<div class="col border-end border-start position-relative week-hour-slot h-100 p-1" data-data="${dataStr}" data-hora="${hora}"></div>`;
+        }
+        html += '</div>';
+    }
+
+    grid.innerHTML = html;
+    await carregarEventosSemana(datasDaSemana);
+}
+
+// 5. RENDERIZAR LISTA
+async function renderizarLista() {
+    const grid = document.getElementById('calendarGridBody');
+    const titulo = document.getElementById('mesAnoAtual');
+
+    titulo.innerText = "Lista de Todos os Agendamentos";
+
+    try {
+        const res = await fetch('/agendamentos');
+        const agendamentos = await res.json();
+
+        if(agendamentos.length === 0) {
+            grid.innerHTML = '<p class="p-4 text-muted text-center">Nenhum agendamento encontrado.</p>';
+            return;
+        }
+
+        let html = '<div class="p-3">';
+        agendamentos.forEach(ag => {
+            const dataAg = new Date(ag.data_hora_inicio);
+            const dataFmt = dataAg.toLocaleDateString('pt-BR');
+            const horaFmt = `${String(dataAg.getHours()).padStart(2,'0')}:${String(dataAg.getMinutes()).padStart(2,'0')}`;
+
+            html += `
+                <div class="card shadow-sm border-0 mb-3 border-start border-primary border-4">
+                    <div class="card-body d-flex justify-content-between align-items-center p-3">
+                        <div>
+                            <h6 class="mb-1 fw-bold text-dark">${ag.pacientes?.nome || 'Paciente não identificado'}</h6>
+                            <small class="text-muted"><i class="ph ph-door me-1"></i>${ag.espacos?.nome || 'Local não definido'}</small>
+                        </div>
+                        <div class="text-end">
+                            <span class="d-block fw-semibold text-primary">${dataFmt}</span>
+                            <small class="text-muted">${horaFmt}</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        grid.innerHTML = html;
+    } catch (error) {
+        grid.innerHTML = '<p class="p-4 text-danger text-center">Erro ao carregar a lista de agendamentos.</p>';
+    }
+}
+
+// ================= FUNÇÕES DE BUSCA DE DADOS =================
+
+async function carregarEventosMes(ano, mes) {
+    try {
+        const resAg = await fetch('/agendamentos');
+        const agendamentos = await resAg.json();
+        const diasElementos = document.querySelectorAll('.calendar-day:not(.opacity-50)');
+
+        agendamentos.forEach(ag => {
+            const dataAg = new Date(ag.data_hora_inicio);
+            if (isNaN(dataAg.getTime())) return;
+
+            const dataISO = ag.data_hora_inicio.substring(0, 10);
+            const [agAno, agMes, agDia] = dataISO.split('-').map(Number);
+
+            if (agAno === ano && (agMes - 1) === mes) {
+                const diaElemento = Array.from(diasElementos).find(el => parseInt(el.getAttribute('data-dia')) === agDia);
+                if (diaElemento) {
+                    const eventList = diaElemento.querySelector('.event-list');
+                    const horaMinuto = `${String(dataAg.getHours()).padStart(2,'0')}:${String(dataAg.getMinutes()).padStart(2,'0')}`;
+                    
+                    eventList.innerHTML += `<div class="badge bg-primary text-start text-truncate w-100 d-block mt-1 p-1" title="${ag.pacientes?.nome || 'Agendamento'}">
+                        ${horaMinuto} - ${ag.pacientes?.nome || 'Agendamento'}
+                    </div>`;
+                }
+            }
+        });
+    } catch (error) {}
+}
+
+async function carregarEventosDia(dataAlvo) {
+    try {
+        const res = await fetch('/agendamentos');
+        const agendamentos = await res.json();
+        const alvoStr = dataAlvo.toISOString().split('T')[0];
+
+        agendamentos.forEach(ag => {
+            if(!ag.data_hora_inicio) return;
+            const agStr = ag.data_hora_inicio.split('T')[0];
+            
+            if (agStr === alvoStr) {
+                const dataObj = new Date(ag.data_hora_inicio);
+                const hora = dataObj.getHours();
+                
+                const slot = document.querySelector(`.day-hour-slot[data-hora="${hora}"]`);
+                if (slot) {
+                    const minFmt = String(dataObj.getMinutes()).padStart(2,'0');
+                    slot.innerHTML += `
+                        <div class="bg-primary bg-opacity-10 border border-primary text-primary rounded-2 p-2 mb-1 shadow-sm" style="font-size: 0.85rem;">
+                            <strong>${hora}:${minFmt}</strong> - ${ag.pacientes?.nome || 'Sem Nome'}<br>
+                            <small class="opacity-75">${ag.espacos?.nome || ''}</small>
+                        </div>
+                    `;
+                }
+            }
+        });
+    } catch(e) {}
+}
+
+async function carregarEventosSemana(datasDaSemanaStr) {
+    try {
+        const res = await fetch('/agendamentos');
+        const agendamentos = await res.json();
+
+        const diasSemanaISO = datasDaSemanaStr.map(d => {
+            let year = d.getFullYear();
+            let month = String(d.getMonth()+1).padStart(2,'0');
+            let day = String(d.getDate()).padStart(2,'0');
+            return `${year}-${month}-${day}`;
+        });
+
+        agendamentos.forEach(ag => {
+            if(!ag.data_hora_inicio) return;
+            const agISO = ag.data_hora_inicio.substring(0, 10);
+            
+            if (diasSemanaISO.includes(agISO)) {
+                const dataObj = new Date(ag.data_hora_inicio);
+                const hora = dataObj.getHours();
+                
+                const slot = document.querySelector(`.week-hour-slot[data-data="${agISO}"][data-hora="${hora}"]`);
+                if (slot) {
+                    const minFmt = String(dataObj.getMinutes()).padStart(2,'0');
+                    slot.innerHTML += `
+                        <div class="bg-primary text-white rounded p-1 mb-1 lh-sm overflow-hidden shadow-sm" style="font-size: 0.70rem; height: 100%; max-height:50px;" title="${ag.pacientes?.nome} - ${ag.espacos?.nome}">
+                            <span class="fw-bold">${hora}:${minFmt}</span><br>
+                            <span class="text-truncate d-block">${ag.pacientes?.nome || 'Agendamento'}</span>
+                        </div>
+                    `;
+                }
+            }
+        });
+    } catch(e) {}
+}
+
+// ================= CONTROLES DE NAVEGAÇÃO =================
+
+document.addEventListener('DOMContentLoaded', () => {
+    verificarUsuario();
+    renderizarCalendario();
+
+    document.getElementById('btnDia').addEventListener('click', () => { modoVisualizacao = 'dia'; renderizarCalendario(); });
+    document.getElementById('btnSemana').addEventListener('click', () => { modoVisualizacao = 'semana'; renderizarCalendario(); });
+    document.getElementById('btnMes').addEventListener('click', () => { modoVisualizacao = 'mes'; renderizarCalendario(); });
+    document.getElementById('btnLista').addEventListener('click', () => { modoVisualizacao = 'lista'; renderizarCalendario(); });
+    
+    document.getElementById('btnMesAnterior').addEventListener('click', () => {
+        if(modoVisualizacao === 'mes') dataAtual.setMonth(dataAtual.getMonth() - 1);
+        else if (modoVisualizacao === 'semana') dataAtual.setDate(dataAtual.getDate() - 7);
+        else if (modoVisualizacao === 'dia') dataAtual.setDate(dataAtual.getDate() - 1);
+        renderizarCalendario();
+    });
+
+    document.getElementById('btnProximoMes').addEventListener('click', () => {
+        if(modoVisualizacao === 'mes') dataAtual.setMonth(dataAtual.getMonth() + 1);
+        else if (modoVisualizacao === 'semana') dataAtual.setDate(dataAtual.getDate() + 7);
+        else if (modoVisualizacao === 'dia') dataAtual.setDate(dataAtual.getDate() + 1);
+        renderizarCalendario();
+    });
+
+    document.getElementById('btnHoje').addEventListener('click', () => {
+        dataAtual = new Date();
+        renderizarCalendario();
+    });
+
+    document.querySelectorAll('.btn-logout').forEach(btn => {
+        btn.addEventListener('click', logout);
+    });
+});
+
+function atualizarBotoes() {
+    document.querySelectorAll('.btn-group button').forEach(btn => {
+        btn.classList.remove('fw-bold', 'bg-white', 'shadow-sm');
+        btn.classList.add('text-muted');
+    });
+
+    const mapa = { dia: 'btnDia', semana: 'btnSemana', mes: 'btnMes', lista: 'btnLista' };
+    const ativo = document.getElementById(mapa[modoVisualizacao]);
+    if (ativo) {
+        ativo.classList.remove('text-muted');
+        ativo.classList.add('fw-bold', 'bg-white', 'shadow-sm');
+    }
+
+    const btnHoje = document.getElementById('btnHoje');
+    if (modoVisualizacao === 'mes') btnHoje.innerText = 'Mês Atual';
+    else if (modoVisualizacao === 'semana') btnHoje.innerText = 'Semana Atual';
+    else if (modoVisualizacao === 'dia') btnHoje.innerText = 'Dia Atual';
+    else if (modoVisualizacao === 'lista') btnHoje.innerText = 'Lista Atual';
+}
+
+// LÓGICA DE SALVAR DO MODAL NOVO AGENDAMENTO GLOBAL
+// (Removido daqui pois agora está no global-agendamento.js)
+function renderizarCalendarioGlobal() {
+    if (typeof renderizarCalendario === 'function') {
+        renderizarCalendario();
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoManager - Documentos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+</head>
+<body class="bg-light">
+
+    <div class="d-flex" id="wrapper">
+
+        <aside class="sidebar d-none d-lg-flex p-4" id="sidebar-wrapper">
+            <div class="sidebar-header d-flex align-items-center gap-2 mb-5">
+                <i class="ph-fill ph-calendar-check logo-icon"></i>
+                <h2 class="fs-5 fw-bold mb-0">PsicoManager</h2>
+            </div>
+            <nav class="sidebar-nav flex-grow-1">
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item"><a href="../index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                    <li class="nav-item"><a href="clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                    <li class="nav-item"><a href="pacientes.html" class="nav-link"><i class="ph ph-heartbeat"></i> Pacientes</a></li>
+                    <li class="nav-item"><a href="financeiro.html" class="nav-link"><i class="ph ph-currency-circle-dollar"></i> Financeiro</a></li>
+                    <li class="nav-item"><a href="convenios.html" class="nav-link"><i class="ph ph-clipboard-text"></i> Convênios</a></li>
+                    <li class="nav-item"><a href="planos.html" class="nav-link"><i class="ph ph-badge-check"></i> Planos</a></li>
+                    <li class="nav-item"><a href="tarefas.html" class="nav-link"><i class="ph ph-list-check"></i> Tarefas</a></li>
+                    <li class="nav-item active"><a href="documentos.html" class="nav-link"><i class="ph ph-file-text"></i> Documentos</a></li>
+                    <li class="nav-item"><a href="lembretes.html" class="nav-link"><i class="ph ph-bell"></i> Lembretes</a></li>
+                    <li class="nav-item"><a href="relatorios.html" class="nav-link"><i class="ph ph-chart-line-up"></i> Relatórios</a></li>
+                    <li class="nav-item"><a href="espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                    <li class="nav-item"><a href="bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-action mb-4">
+                <button class="btn btn-primary w-100 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalNovoDocumento">
+                    <i class="ph ph-plus"></i> Novo Documento
+                </button>
+            </div>
+            <div class="sidebar-footer border-top border-secondary pt-3">
+                <button class="btn-logout w-100 text-start" id="btnLogout"><i class="ph ph-sign-out"></i> Sair do sistema</button>
+            </div>
+        </aside>
+
+        <div id="page-content-wrapper" class="w-100 d-flex flex-column h-100 overflow-auto">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3">
+                <div class="container-fluid p-0">
+                    <button class="btn d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+                        <i class="ph ph-list fs-3"></i>
+                    </button>
+
+                    <form class="d-none d-md-flex ms-2">
+                        <div class="input-group bg-light rounded-pill px-3 py-1 border">
+                            <i class="ph ph-magnifying-glass align-self-center text-muted"></i>
+                            <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Buscar documentos..." id="buscaDocumentos">
+                        </div>
+                    </form>
+
+                    <div class="ms-auto d-flex align-items-center user-profile">
+                        <div class="text-end me-3 d-none d-sm-block">
+                            <small class="text-muted d-block lh-1">Bem-vindo,</small>
+                            <strong id="nomeUsuario" class="d-block mt-1">...</strong>
+                        </div>
+                        <img id="fotoUsuario" src="https://ui-avatars.com/api/?name=User&background=cbd5e1&color=fff" class="rounded-circle" width="40" height="40">
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-3 p-md-4">
+
+                <div class="mb-4">
+                    <h1 class="fs-4 fw-bold text-dark mb-1">Documentos</h1>
+                    <p class="text-muted mb-0 small">Gere e gerencie documentos da clínica</p>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-info bg-opacity-10 p-3 rounded-3 text-info">
+                                    <i class="ph-fill ph-file-text fs-3"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small fw-semibold d-block">Total de Documentos</span>
+                                    <h4 class="mb-0 fw-bold" id="qtdTotalDocumentos">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-success bg-opacity-10 p-3 rounded-3 text-success">
+                                    <i class="ph-fill ph-receipt fs-3"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small fw-semibold d-block">Recibos</span>
+                                    <h4 class="mb-0 fw-bold" id="qtdRecibos">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning">
+                                    <i class="ph-fill ph-clipboard-text fs-3"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small fw-semibold d-block">Contratos</span>
+                                    <h4 class="mb-0 fw-bold" id="qtdContratos">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fs-5 fw-bold mb-0">Documentos Gerados</h2>
+                        <div class="d-flex gap-2">
+                            <select class="form-select form-select-sm" id="filtroTipo" style="width: auto;">
+                                <option value="">Todos os tipos</option>
+                                <option value="recibo">Recibos</option>
+                                <option value="contrato">Contratos</option>
+                                <option value="laudo">Laudos</option>
+                                <option value="outros">Outros</option>
+                            </select>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNovoDocumento">
+                                <i class="ph ph-plus"></i> Novo Documento
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="listaDocumentos" class="d-flex flex-column gap-3">
+                        <p class="text-muted text-center my-4">Carregando documentos...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Novo Documento -->
+    <div class="modal fade" id="modalNovoDocumento" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="ph ph-file-plus me-2"></i>Novo Documento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formDocumento">
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Paciente</label>
+                                <select class="form-select" id="pacienteDocumento" required>
+                                    <option value="" selected disabled>Selecione o paciente...</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Tipo de Documento</label>
+                                <select class="form-select" id="tipoDocumento" required>
+                                    <option value="" selected disabled>Selecione o tipo...</option>
+                                    <option value="recibo">Recibo</option>
+                                    <option value="contrato">Contrato</option>
+                                    <option value="laudo">Laudo Psicológico</option>
+                                    <option value="outros">Outro</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-semibold text-muted small">Título</label>
+                                <input type="text" class="form-control" id="tituloDocumento" required>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Data de Emissão</label>
+                                <input type="date" class="form-control" id="dataEmissaoDocumento" required>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Usar Template</label>
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input" type="checkbox" id="usarTemplate">
+                                    <label class="form-check-label" for="usarTemplate">
+                                        Preencher automaticamente
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-12" id="camposTemplate" style="display: none;">
+                                <div class="border rounded p-3 bg-light">
+                                    <h6 class="fw-bold mb-3">Dados para o Template</h6>
+                                    <div id="templateFields">
+                                        <!-- Campos dinâmicos serão inseridos aqui -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-semibold text-muted small">Conteúdo</label>
+                                <textarea class="form-control" id="conteudoDocumento" rows="8" placeholder="Digite o conteúdo do documento..." required></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success px-4 fw-bold me-2" id="btnGerarPDF">
+                        <i class="ph ph-file-pdf"></i> Gerar PDF
+                    </button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" id="btnSalvarDocumento">Salvar Documento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Visualizar Documento -->
+    <div class="modal fade" id="modalVisualizarDocumento" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="ph ph-file-text me-2"></i><span id="tituloDocumentoModal"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="bg-light p-4 rounded" style="white-space: pre-wrap; font-family: 'Courier New', monospace;" id="conteudoDocumentoModal">
+                        Carregando documento...
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-success px-4 fw-bold" id="btnBaixarPDF">
+                        <i class="ph ph-download"></i> Baixar PDF
+                    </button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Mobile -->
+    <div class="offcanvas offcanvas-start" style="background-color: var(--cor-sidebar);" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header border-bottom border-secondary p-4">
+            <div class="d-flex align-items-center gap-2">
+                <i class="ph-fill ph-calendar-check logo-icon text-primary fs-3"></i>
+                <h5 class="offcanvas-title text-white fw-bold">PsicoManager</h5>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4 d-flex flex-column">
+            <ul class="nav flex-column gap-2 mb-auto sidebar-nav">
+                <li class="nav-item"><a href="../index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                <li class="nav-item"><a href="clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                <li class="nav-item"><a href="pacientes.html" class="nav-link"><i class="ph ph-heartbeat"></i> Pacientes</a></li>
+                <li class="nav-item"><a href="financeiro.html" class="nav-link"><i class="ph ph-currency-circle-dollar"></i> Financeiro</a></li>
+                <li class="nav-item"><a href="convenios.html" class="nav-link"><i class="ph ph-clipboard-text"></i> Convênios</a></li>
+                <li class="nav-item"><a href="planos.html" class="nav-link"><i class="ph ph-badge-check"></i> Planos</a></li>
+                <li class="nav-item"><a href="tarefas.html" class="nav-link"><i class="ph ph-list-check"></i> Tarefas</a></li>
+                <li class="nav-item active"><a href="documentos.html" class="nav-link"><i class="ph ph-file-text"></i> Documentos</a></li>
+                <li class="nav-item"><a href="lembretes.html" class="nav-link"><i class="ph ph-bell"></i> Lembretes</a></li>
+                <li class="nav-item"><a href="relatorios.html" class="nav-link"><i class="ph ph-chart-line-up"></i> Relatórios</a></li>
+                <li class="nav-item"><a href="espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                <li class="nav-item"><a href="bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+            </ul>
+            <button class="btn btn-primary w-100 fw-semibold mb-3" data-bs-toggle="modal" data-bs-target="#modalNovoDocumento">
+                <i class="ph ph-plus"></i> Novo Documento
+            </button>
+            <button class="btn-logout w-100 text-start"><i class="ph ph-sign-out"></i> Sair</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../scripts/documentos.js"></script>
+</body>
+</html>

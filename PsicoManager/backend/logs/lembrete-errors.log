@@ -1,0 +1,96 @@
+[2026-06-01T22:20:54.236Z] [2026-06-01T22:20:54.235Z] PUT /api/lembretes - ID: 70d733e1-5ac6-463a-8cd0-816756a063e0, Body recebido:
+{
+  "titulo": "teste",
+  "tipo": "aniversario",
+  "dias_antecedencia": 12,
+  "hora_envio": "09:00",
+  "ativo": true,
+  "mensagem": "teste"
+}
+[2026-06-01T22:20:54.256Z] [2026-06-01T22:20:54.235Z] PUT /api/lembretes - Dados processados:
+{
+  "titulo": "teste",
+  "tipo": "aniversario",
+  "mensagem": "teste",
+  "hora_envio": "09:00",
+  "ativo": true,
+  "dias_antecedencia": 12
+}
+[2026-06-01T22:20:54.385Z] [2026-06-01T22:20:54.235Z] PUT /api/lembretes - ❌ ERRO no UPDATE:
+{
+  "code": "42703",
+  "details": null,
+  "hint": null,
+  "message": "record \"new\" has no field \"updated_at\""
+}
+[2026-06-01T22:20:54.406Z] [2026-06-01T22:20:54.235Z] PUT /api/lembretes - ❌ ERRO GERAL:
+{
+  "code": "42703",
+  "details": null,
+  "hint": null,
+  "message": "record \"new\" has no field \"updated_at\""
+}
+[2026-06-01T22:21:08.398Z] [2026-06-01T22:21:08.398Z] PUT /api/lembretes - ID: 70d733e1-5ac6-463a-8cd0-816756a063e0, Body recebido:
+{
+  "titulo": "test",
+  "tipo": "pagamento",
+  "dias_antecedencia": 12,
+  "hora_envio": "10:00",
+  "ativo": true,
+  "mensagem": "teste"
+}
+[2026-06-01T22:21:08.400Z] [2026-06-01T22:21:08.398Z] PUT /api/lembretes - Dados processados:
+{
+  "titulo": "test",
+  "tipo": "pagamento",
+  "mensagem": "teste",
+  "hora_envio": "10:00",
+  "ativo": true,
+  "dias_antecedencia": 12
+}
+[2026-06-01T22:21:08.610Z] [2026-06-01T22:21:08.398Z] PUT /api/lembretes - ❌ ERRO no UPDATE:
+{
+  "code": "42703",
+  "details": null,
+  "hint": null,
+  "message": "record \"new\" has no field \"updated_at\""
+}
+[2026-06-01T22:21:08.612Z] [2026-06-01T22:21:08.398Z] PUT /api/lembretes - ❌ ERRO GERAL:
+{
+  "code": "42703",
+  "details": null,
+  "hint": null,
+  "message": "record \"new\" has no field \"updated_at\""
+}
+[2026-06-01T22:21:26.222Z] [2026-06-01T22:21:26.222Z] PUT /api/lembretes - ID: 70d733e1-5ac6-463a-8cd0-816756a063e0, Body recebido:
+{
+  "titulo": "teste",
+  "tipo": "aniversario",
+  "dias_antecedencia": 1,
+  "hora_envio": "09:00",
+  "ativo": true,
+  "mensagem": "teste"
+}
+[2026-06-01T22:21:26.225Z] [2026-06-01T22:21:26.222Z] PUT /api/lembretes - Dados processados:
+{
+  "titulo": "teste",
+  "tipo": "aniversario",
+  "mensagem": "teste",
+  "hora_envio": "09:00",
+  "ativo": true,
+  "dias_antecedencia": 1
+}
+[2026-06-01T22:21:26.321Z] [2026-06-01T22:21:26.222Z] PUT /api/lembretes - ❌ ERRO no UPDATE:
+{
+  "code": "42703",
+  "details": null,
+  "hint": null,
+  "message": "record \"new\" has no field \"updated_at\""
+}
+[2026-06-01T22:21:26.324Z] [2026-06-01T22:21:26.222Z] PUT /api/lembretes - ❌ ERRO GERAL:
+{
+  "code": "42703",
+  "details": null,
+  "hint": null,
+  "message": "record \"new\" has no field \"updated_at\""
+}

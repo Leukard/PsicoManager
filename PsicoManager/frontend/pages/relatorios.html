@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoManager - Relatórios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+</head>
+<body class="bg-light">
+
+    <div class="d-flex" id="wrapper">
+
+        <aside class="sidebar d-none d-lg-flex p-4" id="sidebar-wrapper">
+            <div class="sidebar-header d-flex align-items-center gap-2 mb-5">
+                <i class="ph-fill ph-calendar-check logo-icon"></i>
+                <h2 class="fs-5 fw-bold mb-0">PsicoManager</h2>
+            </div>
+            <nav class="sidebar-nav flex-grow-1">
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item"><a href="../index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                    <li class="nav-item"><a href="clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                    <li class="nav-item"><a href="pacientes.html" class="nav-link"><i class="ph ph-heartbeat"></i> Pacientes</a></li>
+                    <li class="nav-item"><a href="financeiro.html" class="nav-link"><i class="ph ph-currency-circle-dollar"></i> Financeiro</a></li>
+                    <li class="nav-item"><a href="convenios.html" class="nav-link"><i class="ph ph-clipboard-text"></i> Convênios</a></li>
+                    <li class="nav-item"><a href="planos.html" class="nav-link"><i class="ph ph-badge-check"></i> Planos</a></li>
+                    <li class="nav-item"><a href="tarefas.html" class="nav-link"><i class="ph ph-list-check"></i> Tarefas</a></li>
+                    <li class="nav-item"><a href="documentos.html" class="nav-link"><i class="ph ph-file-text"></i> Documentos</a></li>
+                    <li class="nav-item"><a href="lembretes.html" class="nav-link"><i class="ph ph-bell"></i> Lembretes</a></li>
+                    <li class="nav-item active"><a href="relatorios.html" class="nav-link"><i class="ph ph-chart-line-up"></i> Relatórios</a></li>
+                    <li class="nav-item"><a href="espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                    <li class="nav-item"><a href="bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer border-top border-secondary pt-3 mt-auto">
+                <button class="btn-logout w-100 text-start text-white border-0 bg-transparent opacity-75 hover-opacity-100" id="btnLogout"><i class="ph ph-sign-out"></i> Sair do sistema</button>
+            </div>
+        </aside>
+
+        <div id="page-content-wrapper" class="w-100 d-flex flex-column h-100 overflow-auto">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3">
+                <div class="container-fluid p-0">
+                    <button class="btn d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+                        <i class="ph ph-list fs-3"></i>
+                    </button>
+                    <div class="ms-auto d-flex align-items-center user-profile">
+                        <div class="text-end me-3 d-none d-sm-block">
+                            <small class="text-muted d-block lh-1">Bem-vindo,</small>
+                            <strong id="nomeUsuario" class="d-block mt-1">...</strong>
+                        </div>
+                        <img id="fotoUsuario" src="https://ui-avatars.com/api/?name=User&background=cbd5e1&color=fff" class="rounded-circle" width="40" height="40">
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <h1 class="fs-4 fw-bold">Relatórios</h1>
+                        <p class="text-muted mb-0">Análises financeiras, clínico-operacionais e indicadores de saúde do negócio.</p>
+                    </div>
+                </div>
+
+        <div class="row gy-4">
+            <div class="col-12 col-lg-4">
+                <div class="card shadow-sm rounded-4 p-4">
+                    <div class="mb-3">
+                        <h2 class="fs-6 fw-semibold mb-1">Financeiro</h2>
+                        <small class="text-muted">Resumo e exportação</small>
+                    </div>
+                    <div class="mb-3">
+                        <span class="text-muted small">Receitas</span>
+                        <h4 id="relatorioReceitas">R$ 0,00</h4>
+                    </div>
+                    <div class="mb-3">
+                        <span class="text-muted small">Despesas</span>
+                        <h4 id="relatorioDespesas">R$ 0,00</h4>
+                    </div>
+                    <div>
+                        <span class="text-muted small">Lucro</span>
+                        <h4 id="relatorioLucro">R$ 0,00</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card shadow-sm rounded-4 p-4">
+                    <h2 class="fs-6 fw-semibold mb-3">Atendimentos</h2>
+                    <p class="mb-2"><strong>Total:</strong> <span id="relatorioAtendimentosTotal">0</span></p>
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr><th>Status</th><th>Quantidade</th></tr>
+                            </thead>
+                            <tbody id="relatorioPorStatus"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card shadow-sm rounded-4 p-4">
+                    <h2 class="fs-6 fw-semibold mb-3">Pacientes sem prontuário</h2>
+                    <div class="table-responsive" style="max-height: 320px; overflow:auto;">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr><th>Nome</th><th>E-mail</th><th>Telefone</th></tr>
+                            </thead>
+                            <tbody id="pacientesSemProntuario"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gy-4 mt-3">
+            <div class="col-12">
+                <div class="card shadow-sm rounded-4 p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <h2 class="fs-6 fw-semibold mb-1">Logs de auditoria</h2>
+                            <small class="text-muted">Ações recentes dos usuários.</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary" id="btnExportAuditoriaCSV">Exportar logs</button>
+                    </div>
+                    <div class="table-responsive" style="max-height: 360px; overflow:auto;">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Usuário</th>
+                                    <th>Ação</th>
+                                    <th>Detalhes</th>
+                                    <th>Data</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditoriaLogs"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Mobile -->
+    <div class="offcanvas offcanvas-start" style="background-color: var(--cor-sidebar);" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header border-bottom border-secondary p-4">
+            <div class="d-flex align-items-center gap-2">
+                <i class="ph-fill ph-calendar-check logo-icon text-primary fs-3"></i>
+                <h5 class="offcanvas-title text-white fw-bold">PsicoManager</h5>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4 d-flex flex-column">
+            <ul class="nav flex-column gap-2 mb-auto sidebar-nav">
+                <li class="nav-item"><a href="../index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                <li class="nav-item"><a href="clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                <li class="nav-item"><a href="pacientes.html" class="nav-link"><i class="ph ph-heartbeat"></i> Pacientes</a></li>
+                <li class="nav-item"><a href="financeiro.html" class="nav-link"><i class="ph ph-currency-circle-dollar"></i> Financeiro</a></li>
+                <li class="nav-item"><a href="convenios.html" class="nav-link"><i class="ph ph-clipboard-text"></i> Convênios</a></li>
+                <li class="nav-item"><a href="planos.html" class="nav-link"><i class="ph ph-badge-check"></i> Planos</a></li>
+                <li class="nav-item"><a href="tarefas.html" class="nav-link"><i class="ph ph-list-check"></i> Tarefas</a></li>
+                <li class="nav-item"><a href="documentos.html" class="nav-link"><i class="ph ph-file-text"></i> Documentos</a></li>
+                <li class="nav-item"><a href="lembretes.html" class="nav-link"><i class="ph ph-bell"></i> Lembretes</a></li>
+                <li class="nav-item active"><a href="relatorios.html" class="nav-link"><i class="ph ph-chart-line-up"></i> Relatórios</a></li>
+                <li class="nav-item"><a href="espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                <li class="nav-item"><a href="bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+            </ul>
+            <button class="btn-logout w-100 text-start"><i class="ph ph-sign-out"></i> Sair</button>
+        </div>
+    </div>
+
+    <!-- Modal Visualizar Log -->
+    <div class="modal fade" id="modalVisualizarLog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="ph ph-eye me-2"></i>Detalhes do Log</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted small">Usuário</label>
+                        <p id="logUsuario" class="form-control-plaintext">-</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted small">Ação</label>
+                        <p id="logAcao" class="form-control-plaintext">-</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted small">Data/Hora</label>
+                        <p id="logData" class="form-control-plaintext">-</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted small">Detalhes</label>
+                        <pre id="logDetalhes" class="bg-light p-3 rounded border" style="max-height: 300px; overflow-y: auto;">-</pre>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-danger" id="btnExcluirLog"><i class="ph ph-trash me-1"></i> Excluir Log</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../scripts/relatorios.js"></script>
+</body>
+</html>

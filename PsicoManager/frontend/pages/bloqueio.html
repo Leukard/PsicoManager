@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PsicoManager - Bloqueio de Horários</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+    <link rel="stylesheet" href="../styles/bloqueio.css">
+</head>
+<body>
+
+<div class="d-flex" id="wrapper">
+    <aside class="sidebar d-none d-lg-flex p-4" id="sidebar-wrapper">
+        <div class="sidebar-header d-flex align-items-center gap-2 mb-5">
+            <i class="ph-fill ph-calendar-check logo-icon"></i>
+            <h2 class="fs-5 fw-bold mb-0">PsicoManager</h2>
+        </div>
+        <nav class="sidebar-nav flex-grow-1">
+            <ul class="nav flex-column gap-2">
+                <li class="nav-item"><a href="../index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                <li class="nav-item"><a href="clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                <li class="nav-item"><a href="pacientes.html" class="nav-link"><i class="ph ph-heartbeat"></i> Pacientes</a></li>
+                <li class="nav-item"><a href="financeiro.html" class="nav-link"><i class="ph ph-currency-circle-dollar"></i> Financeiro</a></li>
+                <li class="nav-item"><a href="convenios.html" class="nav-link"><i class="ph ph-clipboard-text"></i> Convênios</a></li>
+                <li class="nav-item"><a href="planos.html" class="nav-link"><i class="ph ph-badge-check"></i> Planos</a></li>
+                <li class="nav-item"><a href="tarefas.html" class="nav-link"><i class="ph ph-list-check"></i> Tarefas</a></li>
+                <li class="nav-item"><a href="documentos.html" class="nav-link"><i class="ph ph-file-text"></i> Documentos</a></li>
+                <li class="nav-item"><a href="lembretes.html" class="nav-link"><i class="ph ph-bell"></i> Lembretes</a></li>
+                <li class="nav-item"><a href="relatorios.html" class="nav-link"><i class="ph ph-chart-line-up"></i> Relatórios</a></li>
+                <li class="nav-item"><a href="espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                <li class="nav-item active"><a href="bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-action mb-4">
+            <button class="btn btn-primary w-100 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalNovoAgendamento">
+                <i class="ph ph-plus"></i> Novo Agendamento
+            </button>
+        </div>
+        <div class="sidebar-footer border-top border-secondary pt-3 mt-auto">
+            <button class="btn-logout w-100 text-start text-white border-0 bg-transparent opacity-75 hover-opacity-100"><i class="ph ph-sign-out"></i> Sair do sistema</button>
+        </div>
+    </aside>
+
+    <div id="page-content-wrapper" class="w-100 d-flex flex-column h-100 overflow-auto">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3">
+            <div class="container-fluid p-0">
+                <button class="btn d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+                    <i class="ph ph-list fs-3"></i>
+                </button>
+                
+                <h2 class="fs-5 fw-bold mb-0 d-none d-md-block">Bloqueio de Horários</h2>
+
+                <div class="ms-auto d-flex align-items-center user-profile">
+                    <div class="text-end me-3 d-none d-sm-block">
+                        <small class="text-muted d-block lh-1">Bem-vindo,</small>
+                        <strong id="nomeUsuario" class="d-block mt-1">...</strong>
+                    </div>
+                    <img id="fotoUsuario" src="https://ui-avatars.com/api/?name=User&background=cbd5e1&color=fff" class="rounded-circle" width="40" height="40">
+                </div>
+            </div>
+        </nav>
+
+        <main class="container-fluid p-4 flex-grow-1">
+            <div class="card shadow-sm border-0 rounded-4" style="max-width: 800px; margin: 0 auto;">
+                <div class="card-header bg-primary text-white p-4 d-flex justify-content-between align-items-center">
+                    <h3 class="fw-bold mb-0">Bloqueio de Horários</h3>
+                    <button class="btn btn-light fw-bold btn-sm" onclick="refreshCompleto()">Sincronizar Google Agenda</button>
+                </div>
+                <div class="card-body p-4">
+                    <form id="formBloqueio">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Data início</label>
+                                <input type="datetime-local" id="inicio" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Data fim</label>
+                                <input type="datetime-local" id="fim" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label class="form-label">Motivo</label>
+                            <input type="text" id="descricao" class="form-control" placeholder="Ex: Reunião, almoço..." required>
+                        </div>
+                        <button class="btn btn-primary mt-4 w-100 fw-bold">Bloquear Horário</button>
+                    </form>
+                    <hr class="my-4">
+                    <h5 class="fw-bold mb-3">Horários Bloqueados</h5>
+                    <div id="lista"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start" style="background-color: var(--cor-sidebar);" tabindex="-1" id="mobileMenu">
+    <div class="offcanvas-header border-bottom border-secondary p-4">
+        <div class="d-flex align-items-center gap-2">
+            <i class="ph-fill ph-calendar-check logo-icon text-primary fs-3"></i>
+            <h5 class="offcanvas-title text-white fw-bold">PsicoManager</h5>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-4 d-flex flex-column">
+        <ul class="nav flex-column gap-2 mb-auto sidebar-nav">
+            <li class="nav-item"><a href="../index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+            <li class="nav-item"><a href="calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+            <li class="nav-item"><a href="clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+            <li class="nav-item"><a href="espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+            <li class="nav-item active"><a href="bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+        </ul>
+        <button class="btn btn-primary w-100 fw-semibold mb-3" data-bs-toggle="modal" data-bs-target="#modalNovoAgendamento">
+            <i class="ph ph-plus"></i> Novo Agendamento
+        </button>
+        <button class="btn-logout w-100 text-start text-white border-0 bg-transparent opacity-75 mt-3"><i class="ph ph-sign-out"></i> Sair</button>
+    </div>
+</div>
+
+<div class="modal fade" id="modalNovoAgendamento" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white border-0">
+                <h5 class="modal-title fw-bold"><i class="ph ph-calendar-plus me-2"></i>Novo Agendamento</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="formAgendamentoGlobal">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted small">Cliente / Pessoa</label>
+                        <select class="form-select" id="selectClienteGlobal" required>
+                            <option value="" selected disabled>Carregando clientes...</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted small">Espaço / Local</label>
+                        <select class="form-select" id="selectEspacoGlobal" required>
+                            <option value="" selected disabled>Carregando locais...</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted small">Status da Reunião</label>
+                        <select class="form-select" id="selectStatusGlobal" required>
+                            <option value="" selected disabled>Carregando status...</option>
+                        </select>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Data Início</label>
+                            <input type="datetime-local" class="form-control" id="dataInicioGlobal" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Data Fim</label>
+                            <input type="datetime-local" class="form-control" id="dataFimGlobal" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted small">Observações / Descrição</label>
+                        <textarea class="form-control" id="observacoesGlobal" rows="2" placeholder="Detalhes do agendamento..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 bg-light">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary px-4 fw-bold" id="btnSalvarAgendamentoGlobal">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEditarBloqueio" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white border-0">
+                <h5 class="modal-title fw-bold"><i class="ph ph-pencil-simple me-2"></i>Editar Bloqueio</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="formEditarBloqueio">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Data início</label>
+                            <input type="datetime-local" id="editInicio" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Data fim</label>
+                            <input type="datetime-local" id="editFim" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label fw-semibold text-muted small">Motivo</label>
+                        <input type="text" id="editDescricao" class="form-control" placeholder="Ex: Reunião, almoço..." required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 bg-light">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary px-4 fw-bold" id="btnSalvarEdicaoBloqueio">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 1. CARREGAR USUÁRIO
+    async function verificarUsuario() {
+        try {
+            const res = await fetch('/usuario-logado');
+            const data = await res.json();
+            if (!data.logado) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('nomeUsuario').innerText = data.usuario.nome || "Usuário";
+            document.getElementById('fotoUsuario').src = data.usuario.foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.usuario.nome || "User")}`;
+        } catch (error) {
+            console.error('Erro ao verificar usuário:', error);
+        }
+    }
+
+    async function logout() {
+        try {
+            await fetch('/logout', { method: 'POST' });
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error('Erro no logout:', error);
+        }
+    }
+
+    // 2. SALVAR BLOQUEIO
+    document.getElementById("formBloqueio").addEventListener("submit", async(e)=>{
+        e.preventDefault();
+        try {
+            const response = await fetch("/bloqueios",{
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body: JSON.stringify({
+                    data_inicio: document.getElementById("inicio").value,
+                    data_fim: document.getElementById("fim").value,
+                    descricao: document.getElementById("descricao").value
+                })
+            });
+
+            if(!response.ok) {
+                const erro = await response.json();
+                throw new Error(erro.erro || "Falha ao bloquear");
+            }
+            try { await fetch('/sync-google-calendar'); } catch (syncError) {}
+
+            alert('Horário bloqueado com sucesso!');
+            document.getElementById("formBloqueio").reset();
+            carregarBloqueios();
+        } catch (error) {
+            alert("Erro: " + error.message);
+        }
+    });
+
+    // 3. CARREGAR LISTA DE BLOQUEIOS
+    async function carregarBloqueios(){
+        try {
+            const res = await fetch("/bloqueios");
+            if (!res.ok) {
+                document.getElementById("lista").innerHTML = '<p class="text-muted">Não foi possível carregar os bloqueios.</p>';
+                return;
+            }
+            
+            const dados = await res.json();
+            let html = "";
+            
+            dados.forEach(item=>{
+                const formatarLocal = (isoString) => {
+                    const d = new Date(isoString);
+                    if (isNaN(d.getTime())) return 'Data Inválida';
+                    const dia = String(d.getUTCDate()).padStart(2, '0');
+                    const mes = String(d.getUTCMonth() + 1).padStart(2, '0');
+                    const ano = d.getUTCFullYear();
+                    const hora = String(d.getUTCHours()).padStart(2, '0');
+                    const min = String(d.getUTCMinutes()).padStart(2, '0');
+                    return `${dia}/${mes}/${ano} ${hora}:${min}`;
+                };
+                
+                html += `
+                    <div class="item-bloqueio shadow-sm border-start border-primary border-4 p-3 mb-3 bg-white rounded-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong class="d-block">${item.descricao}</strong>
+                                <span class="small text-secondary">
+                                    <i class="ph ph-clock me-1"></i>
+                                    ${formatarLocal(item.data_inicio)} até 
+                                    ${formatarLocal(item.data_fim)}
+                                </span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-primary py-1 px-2" onclick="prepararEdicaoBloqueio('${item.id}')" title="Editar">
+                                    <i class="ph ph-pencil-simple"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger py-1 px-2" onclick="excluirBloqueio('${item.id}')" title="Excluir">
+                                    <i class="ph ph-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+            document.getElementById("lista").innerHTML = html || '<p class="text-muted">Nenhum bloqueio encontrado.</p>';
+        } catch (err) {
+            console.error("Erro ao carregar lista:", err);
+            document.getElementById("lista").innerHTML = '<p class="text-muted">Erro ao carregar os bloqueios.</p>';
+        }
+    }
+
+    let idBloqueioEmEdicao = null;
+
+    async function prepararEdicaoBloqueio(id) {
+        try {
+            const res = await fetch("/bloqueios");
+            const bloqueios = await res.json();
+            const bloqueio = bloqueios.find(b => b.id === id);
+
+            if (!bloqueio) return;
+            idBloqueioEmEdicao = id;
+            
+            const formatarData = (iso) => {
+                if(!iso) return '';
+                const d = new Date(iso);
+                const pad = (n) => String(n).padStart(2, '0');
+                return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+            };
+            
+            document.getElementById('editInicio').value = formatarData(bloqueio.data_inicio);
+            document.getElementById('editFim').value = formatarData(bloqueio.data_fim);
+            document.getElementById('editDescricao').value = bloqueio.descricao || '';
+
+            const modal = new bootstrap.Modal(document.getElementById('modalEditarBloqueio'));
+            modal.show();
+        } catch (err) {}
+    }
+
+    async function salvarEdicaoBloqueio() {
+        const data_inicio = document.getElementById('editInicio').value;
+        const data_fim = document.getElementById('editFim').value;
+        const descricao = document.getElementById('editDescricao').value;
+
+        if(!data_inicio || !data_fim || !descricao){
+            alert('Preencha todos os campos!');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/bloqueios/${idBloqueioEmEdicao}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data_inicio, data_fim, descricao })
+            });
+            if(!response.ok) {
+                const data = await response.json();
+                throw new Error(data.erro || 'Erro ao salvar');
+            }
+            alert('Bloqueio atualizado com sucesso!');
+            bootstrap.Modal.getInstance(document.getElementById('modalEditarBloqueio')).hide();
+            carregarBloqueios();
+        } catch (err) {
+            alert(err.message);
+        }
+    }
+
+    async function excluirBloqueio(id) {
+        if (!confirm('Tem certeza que deseja excluir este bloqueio?')) return;
+        try {
+            const response = await fetch(`/bloqueios/${id}`, { method: 'DELETE' });
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.erro || 'Erro ao excluir');
+            }
+            alert('Bloqueio excluído com sucesso!');
+            carregarBloqueios();
+        } catch (err) {
+            alert(err.message);
+        }
+    }
+
+    async function refreshCompleto(){
+        try {
+            const resposta = await fetch("/sync-google-calendar");
+            if(resposta.status === 401 || resposta.status === 403) {
+                if(confirm("Sua agenda Google não está conectada. Deseja conectar agora?")) {
+                    const backendOrigin = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                        && window.location.port === '5500'
+                        ? 'http://localhost:5000'
+                        : '';
+                    window.location.href = `${backendOrigin}/auth/google`;
+                    return;
+                }
+            }
+            const dados = await resposta.json();
+            if(dados.erro) throw new Error(dados.erro);
+            await carregarBloqueios();
+            alert("Google Agenda sincronizado com sucesso!");
+        } catch(error){
+            alert("Aviso: " + error.message);
+        }
+    }
+
+    // Inicializar Bloqueios
+    document.addEventListener('DOMContentLoaded', () => {
+        verificarUsuario();
+        carregarBloqueios();
+        document.getElementById('btnSalvarEdicaoBloqueio').addEventListener('click', salvarEdicaoBloqueio);
+        document.querySelectorAll('.btn-logout').forEach(btn => {
+            btn.addEventListener('click', logout);
+        });
+    });
+
+    // --- Lógica Global do Modal de Novo Agendamento (Segura) ---
+    async function carregarDadosModalGlobal() {
+        try {
+            const resCli = await fetch('/clientes');
+            if(resCli.ok) {
+                const clientes = await resCli.json();
+                const selectCli = document.getElementById('selectClienteGlobal');
+                if(selectCli) {
+                    selectCli.innerHTML = '<option value="" selected disabled>Selecione o cliente...</option>' + 
+                                          clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+                }
+            }
+        } catch (err) {}
+
+        try {
+            const resEsp = await fetch('/espacos');
+            if(resEsp.ok) {
+                const espacos = await resEsp.json();
+                const selectEsp = document.getElementById('selectEspacoGlobal');
+                if(selectEsp) {
+                    selectEsp.innerHTML = '<option value="" selected disabled>Selecione o local...</option>' + 
+                                          espacos.map(e => `<option value="${e.id}">${e.nome}</option>`).join('');
+                }
+            }
+        } catch (err) {}
+
+        try {
+            const resStat = await fetch('/status');
+            const selectStat = document.getElementById('selectStatusGlobal');
+            if(resStat.ok) {
+                const status = await resStat.json();
+                if(selectStat) {
+                    selectStat.innerHTML = '<option value="" selected disabled>Selecione o status...</option>' + 
+                                           status.map(s => `<option value="${s.id}">${s.nome}</option>`).join('');
+                }
+            } else {
+                if(selectStat) {
+                    selectStat.innerHTML = `
+                        <option value="" selected disabled>Selecione o status...</option>
+                        <option value="1">Pendente</option>
+                        <option value="2">Confirmado</option>
+                        <option value="3">Cancelado</option>
+                    `;
+                }
+            }
+        } catch (err) {}
+    }
+
+    window.addEventListener('load', () => {
+        carregarDadosModalGlobal();
+        
+        const btnSalvarGlobal = document.getElementById('btnSalvarAgendamentoGlobal');
+        if(btnSalvarGlobal) {
+            btnSalvarGlobal.addEventListener('click', async () => {
+                const payload = {
+                    cliente_id: document.getElementById('selectClienteGlobal').value,
+                    espaco_id: document.getElementById('selectEspacoGlobal').value,
+                    status_id: document.getElementById('selectStatusGlobal').value,
+                    data_hora_inicio: document.getElementById('dataInicioGlobal').value,
+                    data_hora_fim: document.getElementById('dataFimGlobal').value,
+                    observacoes: document.getElementById('observacoesGlobal').value
+                };
+
+                if(!payload.cliente_id || !payload.espaco_id || !payload.status_id || !payload.data_hora_inicio || !payload.data_hora_fim){
+                    alert('Preencha todos os campos obrigatórios!');
+                    return;
+                }
+
+                btnSalvarGlobal.disabled = true;
+                btnSalvarGlobal.innerText = "Salvando...";
+
+                try {
+                    const res = await fetch('/agendamentos', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await res.json();
+                    if(!res.ok) throw new Error(data.erro || 'Erro ao salvar');
+
+                    alert('Agendamento salvo com sucesso!');
+                    bootstrap.Modal.getInstance(document.getElementById('modalNovoAgendamento')).hide();
+                    document.getElementById('formAgendamentoGlobal').reset();
+                } catch (err) {
+                    alert(err.message);
+                } finally {
+                    btnSalvarGlobal.disabled = false;
+                    btnSalvarGlobal.innerText = "Salvar";
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+/* ==========================================
+   ESTILOS ESPECÍFICOS: LOGIN E CADASTRO
+   ========================================== */
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background-color: #f8fafc; /* bg-light do bootstrap ajustado */
+    box-sizing: border-box; /* Evita que o padding crie barra de rolagem */
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 20px;
+    background-color: #ffffff; /* Fundo branco para destacar no wrapper */
+    padding: 2rem; /* Espaçamento interno do card */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidade */
+    box-sizing: border-box;
+}
+
+.auth-logo {
+    width: 56px;
+    height: 56px;
+    background-color: #eff6ff;
+    color: var(--cor-principal, #0d6efd);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1.5rem auto; /* Adicionado margin-bottom para separar do título/inputs */
+}
+
+.password-toggle {
+    cursor: pointer;
+    color: #64748b;
+    transition: color 0.2s;
+}
+
+.password-toggle:hover {
+    color: #0f172a;
+}
+
+/* Ajuste nos inputs para ficar com a mesma cara do sistema */
+.auth-card .form-control {
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    width: 100%; /* Garante que não vazem do card */
+    box-sizing: border-box;
+}
+
+.auth-card .form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    border-color: #93c5fd;
+    outline: none; /* Remove o outline padrão do navegador */
+}
+
+/* ==========================================
+   RESPONSIVIDADE (MEDIA QUERIES)
+   ========================================== */
+
+/* Telas pequenas (Celulares até 480px) */
+@media (max-width: 480px) {
+    .auth-wrapper {
+        padding: 0; /* Remove o padding para aproveitar toda a tela */
+        background-color: #ffffff; /* Fundo inteiro branco */
+    }
+
+    .auth-card {
+        max-width: 100%;
+        min-height: 100vh; /* Faz o card ocupar a altura total */
+        border-radius: 0; /* Remove bordas para parecer um App Nativo */
+        box-shadow: none; /* Remove a sombra, já que ocupa a tela toda */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Centraliza o conteúdo verticalmente */
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* Telas baixas (Celulares em modo paisagem, altura menor que 600px) */
+@media (max-height: 600px) {
+    .auth-wrapper {
+        align-items: flex-start; /* Alinha ao topo para evitar que o conteúdo seja cortado e não dê para rolar */
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+}

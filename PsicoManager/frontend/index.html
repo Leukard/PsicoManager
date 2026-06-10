@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoManager - Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link rel="stylesheet" href="./styles/global.css">
+    <link rel="stylesheet" href="./styles/dashboard.css">
+</head>
+<body class="bg-light">
+
+    <div class="d-flex" id="wrapper">
+        
+        <aside class="sidebar d-none d-lg-flex p-4" id="sidebar-wrapper">
+            <div class="sidebar-header d-flex align-items-center gap-2 mb-5">
+                <i class="ph-fill ph-calendar-check logo-icon"></i>
+                <h2 class="fs-5 fw-bold mb-0">PsicoManager</h2>
+            </div>
+            <nav class="sidebar-nav flex-grow-1">
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item active"><a href="index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="pages/calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                    <li class="nav-item"><a href="pages/clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                    <li class="nav-item"><a href="pages/pacientes.html" class="nav-link"><i class="ph ph-heartbeat"></i> Pacientes</a></li>
+                    <li class="nav-item"><a href="pages/financeiro.html" class="nav-link"><i class="ph ph-currency-circle-dollar"></i> Financeiro</a></li>
+                    <li class="nav-item"><a href="pages/convenios.html" class="nav-link"><i class="ph ph-clipboard-text"></i> Convênios</a></li>
+                    <li class="nav-item"><a href="pages/planos.html" class="nav-link"><i class="ph ph-badge-check"></i> Planos</a></li>
+                    <li class="nav-item"><a href="pages/tarefas.html" class="nav-link"><i class="ph ph-list-check"></i> Tarefas</a></li>
+                    <li class="nav-item"><a href="pages/documentos.html" class="nav-link"><i class="ph ph-file-text"></i> Documentos</a></li>
+                    <li class="nav-item"><a href="pages/lembretes.html" class="nav-link"><i class="ph ph-bell"></i> Lembretes</a></li>
+                    <li class="nav-item"><a href="pages/relatorios.html" class="nav-link"><i class="ph ph-chart-line-up"></i> Relatórios</a></li>
+                    <li class="nav-item"><a href="pages/espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                    <li class="nav-item"><a href="pages/bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-action mb-4">
+                <button class="btn btn-primary w-100 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalNovoAgendamento">
+                    <i class="ph ph-plus"></i> Novo Agendamento
+                </button>
+            </div>
+            <div class="sidebar-footer border-top border-secondary pt-3">
+                <button class="btn-logout w-100 text-start" id="btnLogout"><i class="ph ph-sign-out"></i> Sair do sistema</button>
+            </div>
+        </aside>
+
+        <div id="page-content-wrapper" class="w-100 d-flex flex-column h-100 overflow-auto">
+            
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3">
+                <div class="container-fluid p-0">
+                    <button class="btn d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+                        <i class="ph ph-list fs-3"></i>
+                    </button>
+                    
+                    <form class="d-none d-md-flex ms-2">
+                        <div class="input-group bg-light rounded-pill px-3 py-1 border">
+                            <i class="ph ph-magnifying-glass align-self-center text-muted"></i>
+                            <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Buscar compromisso...">
+                        </div>
+                    </form>
+
+                    <div class="ms-auto d-flex align-items-center user-profile">
+                        <div class="text-end me-3 d-none d-sm-block">
+                            <small class="text-muted d-block lh-1">Bem-vindo,</small>
+                            <strong id="nomeUsuario" class="d-block mt-1">...</strong>
+                        </div>
+                        <img id="fotoUsuario" src="https://ui-avatars.com/api/?name=User&background=cbd5e1&color=fff" class="rounded-circle" width="40" height="40">
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-3 p-md-4">
+                
+                <div class="mb-4">
+                    <h1 class="fs-4 fw-bold text-dark mb-1">Visão Geral</h1>
+                    <p class="text-muted mb-0 small">Aqui está o resumo da sua agenda.</p>
+                </div>
+                
+                <div class="row g-3 mb-4">
+                    
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-info bg-opacity-10 p-3 rounded-3 text-info">
+                                    <i class="ph-fill ph-calendar-star fs-3"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small fw-semibold d-block">Agendamentos hoje</span>
+                                    <h4 class="mb-0 fw-bold" id="qtdHoje">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary">
+                                    <i class="ph-fill ph-calendar-check fs-3"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small fw-semibold d-block">Agendado</span>
+                                    <h4 class="mb-0 fw-bold" id="qtdAgendado">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-secondary bg-opacity-10 p-3 rounded-3 text-secondary">
+                                    <i class="ph-fill ph-prohibit fs-3"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small fw-semibold d-block">Bloqueado</span>
+                                    <h4 class="mb-0 fw-bold" id="qtdBloqueado">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-danger bg-opacity-10 p-3 rounded-3 text-danger">
+                                    <i class="ph-fill ph-x-circle fs-3"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small fw-semibold d-block">Cancelado</span>
+                                    <h4 class="mb-0 fw-bold" id="qtdCancelado">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-success bg-opacity-10 p-3 rounded-3 text-success">
+                                    <i class="ph-fill ph-check-circle fs-3"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small fw-semibold d-block">Concluído</span>
+                                    <h4 class="mb-0 fw-bold" id="qtdConcluido">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning">
+                                    <i class="ph-fill ph-clock-countdown fs-3"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small fw-semibold d-block text-nowrap">Em andamento</span>
+                                    <h4 class="mb-0 fw-bold" id="qtdAndamento">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fs-5 fw-bold mb-0">Próximos Compromissos</h2>
+                        <a href="pages/calendario.html" class="text-primary text-decoration-none fw-semibold small">Ver todos &rarr;</a>
+                    </div>
+
+                    <div id="listaCompromissos" class="d-flex flex-column gap-3">
+                        <p class="text-muted text-center my-4">Carregando compromissos...</p>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fs-5 fw-bold mb-0">Tarefas</h2>
+                        <a href="pages/tarefas.html" class="text-primary text-decoration-none fw-semibold small">Ver todas &rarr;</a>
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-md-4">
+                            <div class="p-3 rounded-4 bg-light h-100">
+                                <span class="text-muted small d-block mb-2">Pendentes</span>
+                                <h3 id="qtdTarefasPendentes" class="mb-0">0</h3>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="p-3 rounded-4 bg-light h-100">
+                                <span class="text-muted small d-block mb-2">Concluídas</span>
+                                <h3 id="qtdTarefasConcluidas" class="mb-0">0</h3>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="p-3 rounded-4 bg-light h-100">
+                                <span class="text-muted small d-block mb-2">Vencidas</span>
+                                <h3 id="qtdTarefasVencidas" class="mb-0">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="listaTarefasDashboard" class="d-flex flex-column gap-3">
+                        <p class="text-muted text-center my-4">Carregando tarefas...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" style="background-color: var(--cor-sidebar);" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header border-bottom border-secondary p-4">
+            <div class="d-flex align-items-center gap-2">
+                <i class="ph-fill ph-calendar-check logo-icon text-primary fs-3"></i>
+                <h5 class="offcanvas-title text-white fw-bold">PsicoManager</h5>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4 d-flex flex-column">
+            <ul class="nav flex-column gap-2 mb-auto sidebar-nav">
+                <li class="nav-item active"><a href="index.html" class="nav-link"><i class="ph ph-squares-four"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="pages/calendario.html" class="nav-link"><i class="ph ph-calendar-blank"></i> Calendário</a></li>
+                <li class="nav-item"><a href="pages/clientes.html" class="nav-link"><i class="ph ph-users"></i> Clientes</a></li>
+                <li class="nav-item"><a href="pages/pacientes.html" class="nav-link"><i class="ph ph-heartbeat"></i> Pacientes</a></li>
+                <li class="nav-item"><a href="pages/financeiro.html" class="nav-link"><i class="ph ph-currency-circle-dollar"></i> Financeiro</a></li>
+                <li class="nav-item"><a href="pages/convenios.html" class="nav-link"><i class="ph ph-clipboard-text"></i> Convênios</a></li>
+                <li class="nav-item"><a href="pages/planos.html" class="nav-link"><i class="ph ph-badge-check"></i> Planos</a></li>
+                <li class="nav-item"><a href="pages/tarefas.html" class="nav-link"><i class="ph ph-list-check"></i> Tarefas</a></li>
+                <li class="nav-item"><a href="pages/documentos.html" class="nav-link"><i class="ph ph-file-text"></i> Documentos</a></li>
+                <li class="nav-item"><a href="pages/lembretes.html" class="nav-link"><i class="ph ph-bell"></i> Lembretes</a></li>
+                <li class="nav-item"><a href="pages/relatorios.html" class="nav-link"><i class="ph ph-chart-line-up"></i> Relatórios</a></li>
+                <li class="nav-item"><a href="pages/espacos.html" class="nav-link"><i class="ph ph-door"></i> Espaços</a></li>
+                <li class="nav-item"><a href="pages/bloqueio.html" class="nav-link"><i class="ph ph-prohibit"></i> Bloqueio</a></li>
+            </ul>
+            <button class="btn btn-primary w-100 fw-semibold mb-3" data-bs-toggle="modal" data-bs-target="#modalNovoAgendamento">
+                <i class="ph ph-plus"></i> Novo Agendamento
+            </button>
+            <button class="btn-logout w-100 text-start"><i class="ph ph-sign-out"></i> Sair</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNovoAgendamento" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="ph ph-calendar-plus me-2"></i>Novo Agendamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formAgendamentoGlobal">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Paciente</label>
+                            <select class="form-select" id="selectClienteGlobal" required>
+                                <option value="" selected disabled>Carregando pacientes...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Espaço / Local</label>
+                            <select class="form-select" id="selectEspacoGlobal" required>
+                                <option value="" selected disabled>Carregando locais...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Quantidade de Pessoas</label>
+                            <input type="number" class="form-control" id="numeroPessoasGlobal" value="1" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Status da Reunião</label>
+                            <select class="form-select" id="selectStatusGlobal" required>
+                                <option value="" selected disabled>Carregando status...</option>
+                            </select>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Data Início</label>
+                                <input type="datetime-local" class="form-control" id="dataInicioGlobal" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Data Fim</label>
+                                <input type="datetime-local" class="form-control" id="dataFimGlobal" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Observações / Descrição</label>
+                            <textarea class="form-control" id="observacoesGlobal" rows="2" placeholder="Detalhes do agendamento..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" id="btnSalvarAgendamentoGlobal">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEditarAgendamento" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="ph ph-pencil-simple me-2"></i>Editar Agendamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formEditarAgendamento">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Paciente</label>
+                            <select class="form-select" id="editSelectCliente" required>
+                                <option value="" selected disabled>Selecione o paciente...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Espaço / Local</label>
+                            <select class="form-select" id="editSelectEspaco" required>
+                                <option value="" selected disabled>Selecione o local...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Quantidade de Pessoas</label>
+                            <input type="number" class="form-control" id="editNumeroPessoas" value="1" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Status da Reunião</label>
+                            <select class="form-select" id="editSelectStatus" required>
+                                <option value="" selected disabled>Selecione o status...</option>
+                            </select>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Data Início</label>
+                                <input type="datetime-local" class="form-control" id="editDataInicio" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold text-muted small">Data Fim</label>
+                                <input type="datetime-local" class="form-control" id="editDataFim" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted small">Observações / Descrição</label>
+                            <textarea class="form-control" id="editObservacoes" rows="2" placeholder="Detalhes do agendamento..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" id="btnSalvarEdicao">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalLembrete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-warning text-dark border-0">
+                    <h5 class="modal-title fw-bold"><i class="ph ph-bell-ringing me-2"></i>Próximos Compromissos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4" id="corpoLembrete">
+                    </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-secondary px-4 fw-bold" data-bs-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./scripts/global-agendamento.js"></script>
+    
+    <script>
+        function atualizaCardSeMudou(id, novoValor) {
+            const el = document.getElementById(id);
+            if (el && el.innerText !== String(novoValor)) {
+                el.innerText = novoValor;
+            }
+        }
+
+        async function atualizarContadores() {
+            try {
+                let countBloqueado = 0;
+                
+                // 1. Puxa bloqueios da tabela de bloqueios
+                try {
+                    const resBloq = await fetch('/bloqueios');
+                    if (resBloq.ok) countBloqueado += (await resBloq.json()).length;
+                } catch(e) {}
+
+                // 2. CRIA O DICIONÁRIO DE STATUS (Decifra os UUIDs!)
+                let mapaStatus = {};
+                try {
+                    const resStat = await fetch('/status');
+                    if (resStat.ok) {
+                        const listaStatus = await resStat.json();
+                        listaStatus.forEach(s => {
+                            // Salva no mapa que o UUID "8508a8e3..." = "cancelado"
+                            mapaStatus[s.id] = s.nome.toLowerCase().trim();
+                        });
+                    }
+                } catch(e) {}
+
+                // 3. Busca agendamentos e classifica
+                const resAgend = await fetch('/agendamentos');
+                if (resAgend.ok) {
+                    const agendamentos = await resAgend.json();
+                    
+                    let hoje = 0, agendado = 0, cancelado = 0, concluido = 0, andamento = 0;
+                    
+                    // Ajusta a data local
+                    const dataObj = new Date();
+                    const ano = dataObj.getFullYear();
+                    const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+                    const dia = String(dataObj.getDate()).padStart(2, '0');
+                    const dataHoje = `${ano}-${mes}-${dia}`;
+
+                    agendamentos.forEach(ag => {
+                        // O SEGREDRO ESTÁ AQUI: Pega o UUID (ag.status_id) e acha o nome no mapa!
+                        // Se o Supabase já mandar o objeto joinado, usamos ele. Se mandar só UUID, traduzimos.
+                        let nomeStatusReal = '';
+                        if (ag.status && ag.status.nome) {
+                            nomeStatusReal = ag.status.nome.toLowerCase();
+                        } else if (mapaStatus[ag.status_id]) {
+                            nomeStatusReal = mapaStatus[ag.status_id];
+                        } else {
+                            nomeStatusReal = String(ag.status_id || '').toLowerCase(); 
+                        }
+
+                        let isCanceladoOuBloqueado = false;
+
+                        // Agora que temos a palavra certa (ex: "cancelado"), a lógica funciona!
+                        if (nomeStatusReal.includes('cancel')) { 
+                            cancelado++;
+                            isCanceladoOuBloqueado = true;
+                        } else if (nomeStatusReal.includes('andamento') || nomeStatusReal.includes('iniciado')) {
+                            andamento++;
+                        } else if (nomeStatusReal.includes('conclu') || nomeStatusReal.includes('finaliz')) {
+                            concluido++;
+                        } else if (nomeStatusReal.includes('bloquead')) {
+                            countBloqueado++;
+                            isCanceladoOuBloqueado = true;
+                        } else {
+                            agendado++;
+                        }
+
+                        // Verificação de Hoje
+                        if (ag.data_hora_inicio) {
+                            const dataAg = ag.data_hora_inicio.substring(0, 10);
+                            if (dataAg === dataHoje && !isCanceladoOuBloqueado) {
+                                hoje++;
+                            }
+                        }
+                    });
+
+                    // Atualiza a tela instantaneamente
+                    atualizaCardSeMudou('qtdHoje', hoje);
+                    atualizaCardSeMudou('qtdAgendado', agendado);
+                    atualizaCardSeMudou('qtdCancelado', cancelado);
+                    atualizaCardSeMudou('qtdConcluido', concluido);
+                    atualizaCardSeMudou('qtdAndamento', andamento);
+                    atualizaCardSeMudou('qtdBloqueado', countBloqueado);
+                }
+            } catch (erro) {
+                console.error("Erro no motor de contagem:", erro);
+            }
+        }
+
+        // Fica rodando a cada 2.5 segundos para ser tempo real
+        window.addEventListener('load', () => {
+            atualizarContadores();
+            setInterval(atualizarContadores, 2500); 
+        });
+    </script>
+
+    <script src="./scripts/dashboard.js"></script>
+</body>
+</html>

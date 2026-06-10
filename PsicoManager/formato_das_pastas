@@ -1,0 +1,55 @@
+meu-projeto-agenda/
+│
+├── backend/                   # ⚙️ CAMADA LÓGICA E API (Node.js)
+│   ├── .env                   # Variáveis de ambiente (Chaves do Supabase, porta do servidor)
+│   ├── package.json           # Dependências do Node.js
+│   ├── server.js              # Arquivo principal que inicia o servidor Express
+│   │
+│   ├── config/
+│   │   └── supabase.js        # Configuração da conexão com o Supabase
+│   │
+│   ├── controllers/           # Recebe a requisição, chama o service e devolve a resposta
+│   │   ├── espacosController.js
+│   │   └── agendamentosController.js
+│   │
+│   ├── routes/                # Define as URLs (Endpoints) da API
+│   │   ├── espacosRoutes.js
+│   │   └── index.js           # Centraliza todas as rotas
+│   │
+│   ├── services/              # Onde fica a "Regra de Negócio" (validações, lógicas complexas)
+│   │   ├── espacosService.js
+│   │   └── agendamentosService.js
+│   │
+│   ├── models/                # Validações de formato de dados (opcional no Supabase, mas exigido na sua atividade)
+│   │
+│   └── middlewares/           # Funções que rodam no meio do caminho (Ex: verificar se o usuário está logado)
+│       └── authMiddleware.js
+│
+│
+└── frontend/                  # 🎨 CAMADA VISUAL (HTML/CSS/JS Puro)
+    ├── index.html             # Página principal (Dashboard/Agenda)
+    │
+    ├── pages/                 # Outras telas do sistema
+    │   ├── clientes.html
+    │   └── espacos.html
+    │
+    ├── styles/                # Arquivos de CSS
+    │   ├── global.css         # Variáveis de cores (#2563EB, etc), fontes e reset
+    │   ├── dashboard.css      # Estilos específicos da tela principal
+    │   └── components.css     # Estilos de botões, modais, cards
+    │
+    ├── scripts/               # (Ou services/components, como exigido na atividade)
+    │   ├── components/
+    │   │   ├── sidebar.js     # Lógica para abrir/fechar menu lateral
+    │   │   └── modal.js       # Lógica genérica de pop-ups
+    │   │
+    │   ├── services/
+    │   │   └── api.js         # Centraliza todos os `fetch()` que vão chamar o seu backend Node
+    │   │
+    │   └── pages/
+    │       └── dashboard.js   # Lógica específica da tela index.html (carregar eventos, pintar cores)
+    │
+    └── assets/                # Imagens estáticas
+        ├── images/
+        │   └── logo-psicomanager.png
+        └── icons/
